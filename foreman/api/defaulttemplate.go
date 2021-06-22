@@ -101,7 +101,9 @@ func (c *Client) UpdateDefaultTemplate(d *ForemanDefaultTemplate, id int) (*Fore
 	log.Tracef("foreman/api/parameter.go#Update")
 
 	reqEndpoint := fmt.Sprintf(DefaultTemplateEndpointPrefix+"/%d", d.OperatingSystemId, id)
-	parameterJSONBytes, jsonEncErr := c.WrapJSONWithTaxonomy("os_default_template", d)
+	wrapped, _ := c.wrapParameters("os_default_template", d)
+	parameterJSONBytes, jsonEncErr := json.Marshal(wrapped)
+
 	if jsonEncErr != nil {
 		return nil, jsonEncErr
 	}
